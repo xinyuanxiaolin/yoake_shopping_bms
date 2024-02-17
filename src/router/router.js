@@ -1,4 +1,6 @@
 import Vue from "vue";
+import {jwtDecode} from 'jwt-decode'
+import { Message } from 'element-ui';
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
@@ -143,6 +145,32 @@ const router = new VueRouter({
   routes,
 });
 
-
+router.beforeEach((to,from,next)=>{
+  //没有token,重定向到登录界面
+  if (to.path === "/admin-login") return next();
+  const local_token = localStorage.token;
+  //如果不存在
+  if (!local_token){
+    Message({
+      type:'warning',
+      message:"您尚未登录,请先登录"
+    })
+    return next("/admin-login")
+  }
+  const decodedToken = jwtDecode(local_token);
+  // 获得过期时间
+  const exp = decodedToken.exp;
+  const now = new Date().getTime() / 1000;  // 将当前时间转换为秒
+  if (exp < now) {
+    // 令牌已过期
+    //跳转
+    Message({
+      type:'warning',
+      message:"信息已过期,请重新登录"
+    })
+    return next("/admin-login")
+  }
+  next();
+})
 
 export default router;

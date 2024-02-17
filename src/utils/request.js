@@ -11,7 +11,7 @@ const err = (error) => {
 // 请求拦截
 service.interceptors.request.use((config) => {
   // 添加token,做判断权限跳转，防越界
-  config.headers=localStorage.getItem("token")
+  config.headers.token=localStorage.getItem("token")
   return config;
 });
 // 响应拦截
