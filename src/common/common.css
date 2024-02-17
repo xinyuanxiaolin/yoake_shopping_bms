@@ -1,0 +1,22 @@
+html,body{
+    margin: 0;
+    height: 100%;
+    background-color: #F6F6F6;
+}
+.bg_color0{
+    background-color: #FFF;
+
+}
+.bg_color1{
+    background-color: #F6F6F6;
+
+}
+
+.font_color1{
+    color: #9B9B9B;
+}
+/* 修改vant的基本样式 */
+.van-field__control::placeholder{
+    color: #969799 !important;
+}
+
