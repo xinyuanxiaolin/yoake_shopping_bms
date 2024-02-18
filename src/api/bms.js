@@ -38,3 +38,23 @@ export const deleteTwoCategory=(id)=>{
 export const putCategory=(data)=>{
   return putAction(`/category`,data)
 }
+
+
+/* 商品管理 */
+//发布商品
+export const publishGoods= (data)=>{
+  return postAction('/goods/publish',data)
+}
+
+//获取商品列表
+export const getGoodsList= ()=>{
+  return getAction('/goods/list')
+}
+//通过商品id和二级分类id获取到商品的详细数据
+export const getGoodsById= (parentId,id)=>{
+  let data = {
+    parentId,
+    id
+  }
+  return getAction('/goods/detail',data)
+}

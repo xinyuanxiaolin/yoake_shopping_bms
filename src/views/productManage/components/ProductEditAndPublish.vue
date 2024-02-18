@@ -14,6 +14,7 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handleMainPictureRemove"
           :on-success="handleMainPictureSuccess"
+          :file-list="mainPictureFileList"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -30,7 +31,6 @@
       </el-form-item>
       <el-form-item label="商品分类" prop="categoryList">
         <el-cascader
-          clearable
           v-model="form.categoryList"
           :options="options"
           @change="handleChange"
@@ -66,6 +66,7 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handlePictureRemove"
           :on-success="handlePictureSuccess"
+          :file-list="PictureFileList"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -96,30 +97,43 @@
         <el-button type="success" @click="addProperty">新增一行</el-button>
       </el-form-item>
 
-      <div style="display: flex; justify-content: center">
-        <el-button type="primary" @click="confirmSumbit">添加商品</el-button>
-        <el-button type="info" @click="$router.back()">取消返回</el-button>
-      </div>
+      <!-- <div style="display: flex; justify-content: center">
+          <el-button type="primary" @click="confirmSumbit">添加商品</el-button>
+        </div> -->
     </el-form>
   </el-row>
 </template>
 
 <script>
 import { publishGoods, getCategory } from "@/api/bms";
+import { throttle } from "lodash";
 export default {
-  name: "productPublish",
+  name: "ProductPublish",
+  props: ["form"],
+  watch: {
+    //使用第三方库实现节流
+    form: {
+      handler: throttle(function (updatedForm) {
+        // 在一段时间内只执行一次
+        this.$emit("form-updated", updatedForm);
+      }, 1000), // 500毫秒内只执行一次
+      deep: true,
+    },
+  },
   data() {
     return {
-      form: {
-        mainPictures: [],
-        categoryList: [],
-        pictures: [],
-        properties: [],
-        name: "",
-        stock: "",
-        price: "",
-        desc: "",
-      },
+      // form: {
+      //   mainPictures: [],
+      //   categoryList: [],
+      //   pictures: [],
+      //   properties: [],
+      //   name: "",
+      //   stock: "",
+      //   price: "",
+      //   desc: "",
+      // },
+      mainPictureFileList:[],
+      PictureFileList:[],
       rules: {
         name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
         mainPictures: [
@@ -132,7 +146,7 @@ export default {
           },
         ],
         categoryList: [
-          { required: true, message: "请填写商品分类", trigger: "change" },
+          { required: true, message: "请填写商品分类", trigger: "blur" },
         ],
         stock: [{ required: true, message: "请输入商品库存", trigger: "blur" }],
         price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
@@ -184,20 +198,46 @@ export default {
       this.options = data;
       // console.log("最终数据结果", data);
     },
+    //处理图片问题,由父组件调用
+    solvePictures(){
+      //因为el的格式是{url:""}的数组
+      // console.log(this.form.mainPictures)
+      if(this.form.mainPictures!=[]&&this.form.mainPictures!=null){
+        this.form.mainPictures.forEach(v=>{
+          let data ={
+            url:v
+          }
+          this.mainPictureFileList.push(data)
+        })
+      }
+      if(this.form.pictures!=[]&&this.form.pictures!=null){
+        this.form.pictures.forEach(v=>{
+          let data ={
+            url:v
+          }
+          this.PictureFileList.push(data)
+        })
+      }
+      
+      
+
+
+    },
     handleChange(val) {
       // console.log("分类改变了",val);
     },
     //主图片删除时
     handleMainPictureRemove(file) {
       console.log(file);
-      let url = file.response.id;
+      let url = file.url;
       let result = this.form.mainPictures.filter((v) => v != url);
       this.form.mainPictures = result;
+      // console.log(this.form.mainPictures)
     },
     //商品海报图片删除时
     handlePictureRemove(file) {
       console.log(file);
-      let url = file.response.id;
+      let url =file.url;
       let result = this.form.pictures.filter((v) => v != url);
       this.form.pictures = result;
     },
@@ -210,12 +250,14 @@ export default {
     //主图上传成功时
     handleMainPictureSuccess(res, file) {
       console.log("主图成功上传的回显:", res, file);
-      this.form.mainPictures.push(res.id);
+      this.form.mainPictures.push(res.url||"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100");
+      console.log(this.form.mainPictures)
     },
     //商品海报图上传成功时
     handlePictureSuccess(res, file) {
       console.log("海报图片成功上传的回显:", res);
-      this.form.pictures.push(URL.createObjectURL(file.raw));
+      this.form.pictures.push(res.url||"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100");
+
     },
     //在图片上传是格式验证
     beforeAvatarUpload(file) {
@@ -264,6 +306,11 @@ export default {
         }
       });
     },
+    //父组件取消界面时清空残留数据
+    clearData(){
+      this.mainPictureFileList=[]
+      this.PictureFileList=[]
+    }
   },
 };
 </script>
@@ -273,6 +320,6 @@ export default {
   margin-left: 20px;
 }
 .properties {
-  width: 700px;
+  width: 600px;
 }
 </style>
