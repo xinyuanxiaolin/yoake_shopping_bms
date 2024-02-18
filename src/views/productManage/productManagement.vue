@@ -45,14 +45,14 @@
       ></ProductEditAndPublish>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取消</el-button>
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="handleSumbit">保存</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getGoodsList, getGoodsById } from "@/api/bms";
+import { getGoodsList, getGoodsById, putGoods } from "@/api/bms";
 import ProductEditAndPublish from "@/views/productManage/components/ProductEditAndPublish.vue";
 export default {
   components: {
@@ -113,14 +113,20 @@ export default {
       this.form = updatedForm;
     },
     //取消编辑
-    handleCancel(){
-      this.editDialogVisible=false
+    handleCancel() {
+      this.editDialogVisible = false;
       //删除编辑页面内的数据残留
-      this.form={}
+      this.form = {};
       this.$refs.changeProduct.clearData();
-     
-
-    }
+    },
+    //保存修改商品
+    async handleSumbit() {
+      const res = await putGoods(this.form);
+      if (res.code == 1) {
+        this.$message.success("保存成功");
+        this.editDialogVisible = false;
+      }
+    },
   },
 };
 </script>

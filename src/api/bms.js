@@ -58,3 +58,7 @@ export const getGoodsById= (parentId,id)=>{
   }
   return getAction('/goods/detail',data)
 }
+//修改商品
+export const putGoods =(data)=>{
+  return putAction('/goods',data)
+}
