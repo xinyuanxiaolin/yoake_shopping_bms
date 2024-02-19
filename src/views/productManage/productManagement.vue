@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { getGoodsList, getGoodsById, putGoods } from "@/api/bms";
+import { getGoodsList, getGoodsById, putGoods, deleteGoods } from "@/api/bms";
 import ProductEditAndPublish from "@/views/productManage/components/ProductEditAndPublish.vue";
 export default {
   components: {
@@ -89,6 +89,19 @@ export default {
     //删除单个商品
     handleDelete(row) {
       console.log(row);
+      let ids = [row.id];
+      this.$confirm("确认删除商品?", "删除商品")
+        .then(async () => {
+          await deleteGoods(ids);
+          this.$message.success("删除成功");
+          this.$nextTick(()=>{
+            this.init();
+          })
+        })
+        .catch(() => {
+          this.$message("取消删除");
+        });
+      
     },
     //编辑商品
     handleEdit(row) {

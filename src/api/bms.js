@@ -62,3 +62,7 @@ export const getGoodsById= (parentId,id)=>{
 export const putGoods =(data)=>{
   return putAction('/goods',data)
 }
+//删除单个商品或者批量删除商品
+export const deleteGoods = (ids)=>{
+  return deleteAction(`/goods/${ids}`)
+}
