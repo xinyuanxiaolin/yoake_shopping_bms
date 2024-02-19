@@ -9,8 +9,9 @@
     >
       <el-form-item label="商品图" prop="mainPictures" key="form.mainPictures">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://localhost:8080/upload"
           list-type="picture-card"
+          :headers="headers"
           :on-preview="handlePictureCardPreview"
           :on-remove="handleMainPictureRemove"
           :on-success="handleMainPictureSuccess"
@@ -61,8 +62,9 @@
       </el-form-item>
       <el-form-item label="商品海报">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://localhost:8080/upload"
           list-type="picture-card"
+          :headers="headers"
           :on-preview="handlePictureCardPreview"
           :on-remove="handlePictureRemove"
           :on-success="handlePictureSuccess"
@@ -132,6 +134,7 @@ export default {
       //   price: "",
       //   desc: "",
       // },
+      headers:{'token':localStorage.getItem('token')},
       mainPictureFileList:[],
       PictureFileList:[],
       rules: {
@@ -250,13 +253,13 @@ export default {
     //主图上传成功时
     handleMainPictureSuccess(res, file) {
       console.log("主图成功上传的回显:", res, file);
-      this.form.mainPictures.push(res.url||"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100");
+      this.form.mainPictures.push(res.result.url);
       console.log(this.form.mainPictures)
     },
     //商品海报图上传成功时
     handlePictureSuccess(res, file) {
       console.log("海报图片成功上传的回显:", res);
-      this.form.pictures.push(res.url||"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100");
+      this.form.pictures.push(res.result.url);
 
     },
     //在图片上传是格式验证
@@ -288,24 +291,6 @@ export default {
       }
     },
 
-    //确认提交商品
-    confirmSumbit() {
-      this.$refs["rulesForm"].validate(async (valid) => {
-        if (valid) {
-          const res = await publishGoods(this.form);
-          if (res.code == 1) {
-            this.$message.success("商品发布成功!");
-            setTimeout(() => {
-              this.$router.push("/bms/product-manage");
-            }, 1000);
-          }
-        } else {
-          console.log(this.form.mainPictures);
-
-          return false;
-        }
-      });
-    },
     //父组件取消界面时清空残留数据
     clearData(){
       this.mainPictureFileList=[]

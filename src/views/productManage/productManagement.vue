@@ -9,6 +9,12 @@
     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="picture" label="商品图片" width="150">
+        <template slot-scope="scope">
+          <el-image
+            :src="scope.row.picture"
+            style="width: 100px; height: 100px"
+          ></el-image>
+        </template>
       </el-table-column>
       <el-table-column prop="name" label="商品名称" width="150">
       </el-table-column>
@@ -94,19 +100,27 @@ export default {
         .then(async () => {
           await deleteGoods(ids);
           this.$message.success("删除成功");
-          this.$nextTick(()=>{
+          this.$nextTick(() => {
             this.init();
-          })
+          });
         })
         .catch(() => {
           this.$message("取消删除");
         });
-      
     },
     //编辑商品
     handleEdit(row) {
-      // console.log(row)
       this.editDialogVisible = true;
+      // console.log(row)
+      // this.$refs.changeProduct.$refs["rulesForm"].validate((valid) => {
+      //   if (valid) {
+      //     console.log("你好")
+      //   } else {
+      //     console.log(this.form.mainPictures);
+
+      //     return false;
+      //   }
+      // });
       getGoodsById(row.parentId, row.id).then((res) => {
         this.form = res.result;
         this.$nextTick(() => {
@@ -137,6 +151,7 @@ export default {
       const res = await putGoods(this.form);
       if (res.code == 1) {
         this.$message.success("保存成功");
+        this.$refs.changeProduct.clearData();
         this.editDialogVisible = false;
       }
     },
