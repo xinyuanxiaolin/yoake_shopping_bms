@@ -104,7 +104,7 @@ export default {
       title: "操作",
       isEdit: false,
       categoryList: [],
-      headers:{'token':localStorage.getItem('token')},
+      headers: { token: localStorage.getItem("token") },
       form: {
         id: "",
         name: "",
@@ -289,5 +289,34 @@ export default {
       margin: 10px 10px;
     }
   }
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.avatar-uploader {
+  width: 178px;
+  height: 178px;
+}
+.avatar-uploader .el-upload {
+  width: 178px;
+  height: 178px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
 }
 </style>

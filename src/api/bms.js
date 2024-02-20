@@ -66,3 +66,25 @@ export const putGoods =(data)=>{
 export const deleteGoods = (ids)=>{
   return deleteAction(`/goods/${ids}`)
 }
+
+
+/* 用户管理 */
+export const getUsers = (pageNum,pageSize,searchText) =>{
+  let data ={
+    pageNum,
+    pageSize,
+    searchText
+  }
+  return getAction("/member",data)
+}
+
+/* 新增或者编辑用户,有传id为编辑用户 */
+export const putUsers = (data)=>{
+  return putAction("/member",data)
+}
+
+/* 删除用户,可批量 */
+export const deleteUsers = (ids)=>{
+  return deleteAction(`/member/${ids}`)
+
+}
