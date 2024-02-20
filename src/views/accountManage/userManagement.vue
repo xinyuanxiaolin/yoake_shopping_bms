@@ -325,7 +325,6 @@ export default {
 </script>
 
 <style scoped>
-/* Add your custom styles here if needed */
 .demo-form-inline {
   margin-bottom: 20px;
 }

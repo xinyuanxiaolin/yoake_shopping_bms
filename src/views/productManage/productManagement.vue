@@ -1,5 +1,27 @@
 <template>
   <div>
+    <!-- 头部 -->
+    <el-row type="flex" justify="center">
+      <el-col :span="2"></el-col>
+      <el-col :span="2">
+        <el-button type="primary" @click="AddGoods">新增商品</el-button>
+      </el-col>
+      <el-col :span="2">
+        <el-button type="danger" @click="deleteBatchIds">批量删除</el-button>
+      </el-col>
+      <el-col :span="15"></el-col>
+      <el-col :span="8">
+        <el-form :inline="true"  class="demo-form-inline">
+          <el-form-item>
+            <el-input v-model="searchText" placeholder="输入关键字" />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="handleSearch" type="primary">搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+    <!-- 表格 -->
     <el-table
       :data="goodsData"
       ref="multipleTable"
@@ -38,6 +60,19 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 分页 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageNum"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    />
+    
+    <!-- 弹框 -->
     <el-dialog
       title="编辑商品"
       :visible.sync="editDialogVisible"
@@ -68,18 +103,12 @@ export default {
     return {
       editDialogVisible: false,
       form: {},
-      multipleSelection: [],
-      goodsData: [
-        {
-          picture: "1",
-          name: "王小虎",
-          category: "上海",
-          nowPrice: "普陀区",
-          price: "上海市普陀区金沙江路 1518 弄",
-          stock: 200333,
-          desc: "湿哒哒达到啊大大大啊大打阿瑟的啊大是",
-        },
-      ],
+      goodsData: [],
+      pageNum:1,
+      pageSize:10,
+      searchText:'',
+      total: 0,
+      ids:[],
     };
   },
   mounted() {
@@ -88,9 +117,9 @@ export default {
   methods: {
     async init() {
       //获取初始的商品数据
-      const res = await getGoodsList();
+      const res = await getGoodsList(this.pageNum,this.pageSize,this.searchText)
       // console.log(res);
-      this.goodsData = res.result;
+      this.goodsData = res.result.list;
     },
     //删除单个商品
     handleDelete(row) {
@@ -107,6 +136,23 @@ export default {
         .catch(() => {
           this.$message("取消删除");
         });
+    },
+    //批量删除商品
+    deleteBatchIds(){
+      if (this.ids == null || this.ids == "") {
+        this.$message.warning("没有选中需要删除的用户!");
+        return;
+      }
+
+      this.$confirm("请你确认是否要删除这些商品?", "批量删除商品")
+        .then(async (result) => {
+          const res = await deleteGoods(this.ids);
+          if (res.code === 1) {
+            this.$message.success("删除成功");
+            this.init();
+          }
+        })
+        .catch(() => this.$message("取消批量删除"));
     },
     //编辑商品
     handleEdit(row) {
@@ -130,8 +176,12 @@ export default {
     },
     // 选择框发生改变
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      // console.log(val);
+      let data =[]
+      val.forEach(v=>{
+        data.push(v.id)
+      })
+      this.ids = data;
+      // console.log(this.ids );
     },
     handleFormUpdated(updatedForm) {
       // 处理表单变化事件，可以在这里执行额外的逻辑
@@ -154,6 +204,23 @@ export default {
         this.$refs.changeProduct.clearData();
         this.editDialogVisible = false;
       }
+    },
+    //新增商品
+    AddGoods(){
+      this.$router.push("/bms/product-publish")
+    },
+    //搜索
+    handleSearch(){
+      this.init();
+    },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.pageNum = 1;
+      this.init();
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      this.init();
     },
   },
 };

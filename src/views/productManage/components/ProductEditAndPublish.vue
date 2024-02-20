@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { publishGoods, getCategory } from "@/api/bms";
+import {getCategory } from "@/api/bms";
 import { throttle } from "lodash";
 export default {
   name: "ProductPublish",
@@ -139,15 +139,7 @@ export default {
       PictureFileList:[],
       rules: {
         name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
-        mainPictures: [
-          {
-            required: true,
-            type: "array",
-            min: 1,
-            message: "请上传商品图",
-            trigger: "change",
-          },
-        ],
+        mainPictures: [],
         categoryList: [
           { required: true, message: "请填写商品分类", trigger: "blur" },
         ],

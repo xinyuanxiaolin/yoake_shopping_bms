@@ -46,9 +46,14 @@ export const publishGoods= (data)=>{
   return postAction('/goods/publish',data)
 }
 
-//获取商品列表
-export const getGoodsList= ()=>{
-  return getAction('/goods/list')
+//获取商品列表多条件查询
+export const getGoodsList= (pageNum,pageSize,searchText)=>{
+  let data={
+    pageNum,
+    pageSize,
+    searchText
+  }
+  return getAction('/goods/list',data)
 }
 //通过商品id和二级分类id获取到商品的详细数据
 export const getGoodsById= (parentId,id)=>{
@@ -87,4 +92,39 @@ export const putUsers = (data)=>{
 export const deleteUsers = (ids)=>{
   return deleteAction(`/member/${ids}`)
 
+}
+
+
+/* 订单管理 */
+//获取订单列表条件查询
+export const getOrderListApi =(pageNum,pageSize,orderState,searchText) =>{
+  let data={
+    pageNum,
+    pageSize,
+    orderState,
+    searchText
+  }
+  return getAction("/member/order/list",data)
+}
+
+//取消订单
+export const cancelOrderApi = (id)=>{
+  let data ={
+    id,
+    cancelReason:"管理员取消"
+  }
+
+  return putAction(`/member/order/${id}/cancel`,data)
+}
+//删除订单
+export const deleteOrderApi = (ids)=>{
+  let data={
+    ids
+  }
+  return deleteAction("/member/order",data)
+}
+
+//发货
+export const getConsignmentApi =(id)=>{
+  return getAction(`/member/order/consignment/${id}`)
 }

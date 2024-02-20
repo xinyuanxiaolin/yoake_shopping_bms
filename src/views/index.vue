@@ -24,7 +24,7 @@
           <el-menu-item-group>
             <el-menu-item index="/bms/product-manage">商品管理</el-menu-item>
             <el-menu-item index="/bms/product-publish">商品发布</el-menu-item>
-            <el-menu-item index="/bms/product-comments">商品评论</el-menu-item>
+            <!-- <el-menu-item index="/bms/product-comments">商品评论</el-menu-item> -->
             <el-menu-item index="/bms/sort-manage">分类管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -46,7 +46,7 @@
             <el-menu-item index="/bms/user-manage">用户管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="5">
+        <!-- <el-submenu index="5">
           <template slot="title">
             <i class="iconfont icon-shezhi"></i>
             <span>设置</span>
@@ -55,7 +55,7 @@
             <el-menu-item index="/bms/person-info">个人资料</el-menu-item>
             <el-menu-item index="/bms/safe-setting">安全设置</el-menu-item>
           </el-menu-item-group>
-        </el-submenu>
+        </el-submenu> -->
       </el-menu>
     </div>
 
