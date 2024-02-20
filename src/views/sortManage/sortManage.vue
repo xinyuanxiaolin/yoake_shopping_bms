@@ -172,6 +172,7 @@ export default {
     },
     //编辑分类
     editCategory(item, level) {
+      console.log(item)
       this.title = "修改分类";
       this.dialogFormVisible = true;
       this.isEdit = true;
@@ -179,6 +180,7 @@ export default {
       this.form.level = level;
       this.form.id = JSON.parse(JSON.stringify(item.id));
       this.form.name = JSON.parse(JSON.stringify(item.name));
+      this.form.picture = JSON.parse(JSON.stringify(item.picture));
     },
     //取消提交表单
     cancelSumbit() {
@@ -219,7 +221,7 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      this.form.picture = URL.createObjectURL(file.raw);
+      this.form.picture = res.result.url
     },
     beforeAvatarUpload(file) {
       // console.log(file)
