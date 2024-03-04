@@ -2,6 +2,7 @@ import axios from "axios";
 const service = axios.create({
   // 请求超时
   timeout: 15000,
+  baseURL:"/api"
 });
 
 // 异常响应，有空写

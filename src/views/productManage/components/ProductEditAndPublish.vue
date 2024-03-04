@@ -9,7 +9,7 @@
     >
       <el-form-item label="商品图" prop="mainPictures" key="form.mainPictures">
         <el-upload
-          action="http://localhost:8080/upload"
+          action="http://localhost:8080/api/upload"
           list-type="picture-card"
           :headers="headers"
           :on-preview="handlePictureCardPreview"

@@ -120,6 +120,7 @@ export default {
       const res = await getGoodsList(this.pageNum,this.pageSize,this.searchText)
       // console.log(res);
       this.goodsData = res.result.list;
+      this.total = res.result.total
     },
     //删除单个商品
     handleDelete(row) {

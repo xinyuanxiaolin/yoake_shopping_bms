@@ -15,6 +15,7 @@ import "@/common/elementui.js";
 
 Vue.config.productionTip = false;
 console.log("当前环境：" + process.env.NODE_ENV);
+
 new Vue({
   router,
   render: (h) => h(App),

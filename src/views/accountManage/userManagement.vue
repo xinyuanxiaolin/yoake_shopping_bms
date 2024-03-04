@@ -137,7 +137,7 @@
           <el-upload
             class="avatar-uploader"
             list-type="picture-card"
-            action="http://localhost:8080/upload"
+            action="http://localhost:8080/api/upload"
             :headers="headers"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -187,7 +187,7 @@ export default {
         birthday: "",
         gender: "",
         profession: "",
-        avatar: "",
+        avatar: null,
         address: "",
         createTime: "",
       },
@@ -264,7 +264,7 @@ export default {
         birthday: "",
         gender: "",
         profession: "",
-        avatar: "",
+        avatar: null,
         address: "",
         createTime: "",
       };
@@ -303,7 +303,7 @@ export default {
       this.updatePagedUsers();
     },
     handleAvatarSuccess(res, file) {
-      this.editForm.avatar = URL.createObjectURL(file.raw);
+      this.editForm.avatar = res.result.url
     },
     beforeAvatarUpload(file) {
       // console.log(file)

@@ -64,7 +64,7 @@
           <el-upload
             class="avatar-uploader"
             list-type="picture-card"
-            action="http://localhost:8080/upload"
+            action="http://localhost:8080/api/upload"
             :headers="headers"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"

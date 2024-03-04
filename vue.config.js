@@ -8,6 +8,9 @@ module.exports = defineConfig({
         target: process.env.VUE_API_BASE_URL, //请求本地 需要后台项目
         ws: false,
         changeOrigin: true,
+        pathRewrite:{
+          '^/api':''
+        }
       },
       // "/api": {
       //   target: "http://localhost:3000",

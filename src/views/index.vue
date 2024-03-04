@@ -63,7 +63,7 @@
       <div id="title-left" class="font_color1">欢迎来到后台管理系统！</div>
       <div id="title-right" class="font_color1">
         <div @click="()=>{this.$router.push('/bms')}"><i class="iconfont icon-shouyefill"></i><span>首页</span></div>
-        <div><i class="iconfont icon-yonghu-yuan"></i><span>用户名</span></div>
+        <div><i class="iconfont icon-yonghu-yuan"></i><span>管理员</span></div>
         <div @click="exitBMS"><i class="iconfont icon-icon"></i><span>退出</span></div>
 
       </div>
@@ -88,6 +88,7 @@ export default {
     },
     methods: {
         exitBMS() {
+            localStorage.removeItem("token")
             this.$router.push('/admin-login');
         }
     },
