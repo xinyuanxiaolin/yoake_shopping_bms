@@ -128,3 +128,20 @@ export const deleteOrderApi = (ids)=>{
 export const getConsignmentApi =(id)=>{
   return getAction(`/member/order/consignment/${id}`)
 }
+
+/* 设置 */
+
+//获取所有轮播图
+export const getBannerApi =()=>{
+  return getAction("/home/banner/all")
+}
+//修改和新增轮播图
+export const putBannerApi =(data)=>{
+  return putAction("/home/banner",data)
+}
+
+
+//删除轮播图
+export const deleteBannerApi = (ids)=>{
+  return deleteAction(`/home/banner/${ids}`)
+}

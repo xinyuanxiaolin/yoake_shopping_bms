@@ -293,12 +293,12 @@ export default {
   }
 }
 .avatar {
-  width: 178px;
-  height: 178px;
+  width: 9.7rem;
+  height: 9.7rem;
   display: block;
 }
 .avatar-uploader {
-  width: 178px;
-  height: 178px;
+  width: 9.8667rem;
+  height: 9.8667rem;
 }
 </style>

@@ -131,6 +131,15 @@ const routes = [
         meta:{
           title:"安全设置"
         }
+      },
+      //轮播图设置
+      {
+        path:"banner-setting",
+        name:"banner-setting",
+        component:()=> import("../views/bmsSetting/bannerSetting.vue"),
+        meta:{
+          title:"轮播图设置"
+        }
       }
 
       
