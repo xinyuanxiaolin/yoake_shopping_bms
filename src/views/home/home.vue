@@ -22,18 +22,30 @@
       <el-card class="box-card card-2">
         <div class="part">
           <p>统计表</p>
+          <div>
+            <Echarts
+              ref="bar"
+              :chartOptions="barChartOptions"
+              :width="chartWidth"
+              :height="chartHeight"
+            />
+          </div>
         </div>
       </el-card>
       <el-card class="box-card card-3">
         <div class="part">
           <p>待处理事务</p>
           <div class="part-row border-color">
-            <div class="part-col text-color" v-for="(order,index) in orderList" :key="index" @click="$router.push(order.url)">
-              <span class="text-color">{{order.num}}</span>
-              <span class="text-color">{{order.name}}</span>
-              <i class="iconfont icon-size" :class="order.icon" ></i>
+            <div
+              class="part-col text-color"
+              v-for="(order, index) in orderList"
+              :key="index"
+              @click="$router.push(order.url)"
+            >
+              <span class="text-color">{{ order.num }}</span>
+              <span class="text-color">{{ order.name }}</span>
+              <i class="iconfont icon-size" :class="order.icon"></i>
             </div>
-
           </div>
         </div>
       </el-card>
@@ -42,9 +54,13 @@
 </template>
 
 <script>
-import { getOrderListApi} from "@/api/bms";
+import { getOrderListApi } from "@/api/bms";
+import Echarts from "@/components/Echarts.vue";
 export default {
   name: "home",
+  components: {
+    Echarts,
+  },
   data() {
     return {
       opList: [
@@ -64,43 +80,99 @@ export default {
           icon: "icon-dingdanzhongxin",
         },
       ],
-      orderList:[
+      orderList: [
         {
-          url:"/bms/order-manage",
-          num:null,
-          name:"待付款",
-          icon:"icon-daifukuan"
+          url: "/bms/order-manage",
+          num: null,
+          name: "待付款",
+          icon: "icon-daifukuan",
         },
         {
-          url:"/bms/order-manage",
-          num:null,
-          name:"待发货",
-          icon:"icon-daifahuo"
+          url: "/bms/order-manage",
+          num: null,
+          name: "待发货",
+          icon: "icon-daifahuo",
         },
         {
-          url:"/bms/order-manage",
-          num:null,
-          name:"待收货",
-          icon:"icon-daifukuan"
-        }
-      ]
+          url: "/bms/order-manage",
+          num: null,
+          name: "待收货",
+          icon: "icon-daifukuan",
+        },
+      ],
+      //订单统计图
+      barChartOptions: {
+        tooltip: {
+          formatter: function (params) {
+            return params.name + ": " + params.value;
+          },
+        },
+        xAxis: {
+          type: "category",
+          data: ["待付款", "待收货", "待发货", "待评价", "已完成", "已取消"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            name: "订单数量",
+            type: "bar",
+            data: [],
+            itemStyle: {
+              color: function (params) {
+                var colorList = [
+                  "#c23531",
+                  "#2f4554",
+                  "#61a0a8",
+                  "#d48265",
+                  "#749f83",
+                  "#ca8622",
+                ];
+                return colorList[params.dataIndex];
+              },
+            },
+          },
+        ],
+      },
+
+      chartWidth: "100%", // 定义图表宽度
+      chartHeight: "400px", // 定义图表高度
     };
   },
-  mounted(){
-    this.init()
+  mounted() {
+    this.init();
   },
-  methods:{
-    async init(){
+  methods: {
+    async init() {
       //获取所有订单情况
-     const res= await getOrderListApi(1,10,0,"");
-     let orderState = [1,2,3]
-     for(let i =0;i<this.orderList.length;++i){
-     let data= res.result.items.filter((v)=>v.orderState==orderState[i]);
-     this.orderList[i].num=data.length
-    //  console.log(data)
-     }
-    }
-  }
+      const res = await getOrderListApi(1, 10, 0, "");
+      //待处理事务数据处理
+      let orderState = [1, 2, 3];
+      for (let i = 0; i < this.orderList.length; ++i) {
+        let data = res.result.items.filter(
+          (v) => v.orderState == orderState[i]
+        );
+        this.orderList[i].num = data.length;
+        //  console.log(data)
+      }
+
+      //订单echarts数据处理
+      let orderState2 = [1, 2, 3, 4, 5, 6];
+      let data = [];
+      for (let j = 0; j < orderState2.length; ++j) {
+        const tmp = res.result.items.filter(
+          (v) => v.orderState == orderState2[j]
+        );
+        data.push(tmp.length);
+      }
+      this.barChartOptions.series[0] = {
+        ...this.barChartOptions.series[0],
+        data,
+      };
+      this.$refs.bar.renderChart();
+    },
+  },
 };
 </script>
 
@@ -151,15 +223,15 @@ export default {
     }
   }
 }
-.border-color{
-  background-color: #FFA098;
+.border-color {
+  background-color: #ffa098;
   padding: 10px;
   border-radius: 10px;
 }
-.text-color{
+.text-color {
   color: #fff !important;
 }
-.icon-size{
+.icon-size {
   font-size: 30px;
 }
 </style>
