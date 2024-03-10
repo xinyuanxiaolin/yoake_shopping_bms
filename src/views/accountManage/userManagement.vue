@@ -78,8 +78,11 @@
       ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleEdit(scope.row)" type="text" size="small"
+          <!-- <el-button @click="handleEdit(scope.row)" type="text" size="small"
             >编辑</el-button
+          > -->
+          <el-button type="text" size="small"
+            >禁用</el-button
           >
           <el-button @click="handleDelete(scope.row)" type="text" size="small"
             >删除</el-button

@@ -106,7 +106,10 @@ export const getOrderListApi =(pageNum,pageSize,orderState,searchText) =>{
   }
   return getAction("/member/order/list",data)
 }
-
+//获取所有订单列表
+export const getOrderListAllApi =()=>{
+  return getAction("/member/order/list/all")
+}
 //取消订单
 export const cancelOrderApi = (id)=>{
   let data ={
@@ -127,6 +130,10 @@ export const deleteOrderApi = (ids)=>{
 //发货
 export const getConsignmentApi =(id)=>{
   return getAction(`/member/order/consignment/${id}`)
+}
+//退款退货
+export const confirmRefundApi = (id)=>{
+  return putAction(`/member/order/${id}/confirmReject`)
 }
 
 /* 设置 */

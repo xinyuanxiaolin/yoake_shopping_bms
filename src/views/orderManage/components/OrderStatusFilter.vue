@@ -9,6 +9,9 @@
         <el-radio-button label="4">待评价</el-radio-button>
         <el-radio-button label="5">已完成</el-radio-button>
         <el-radio-button label="6">已取消</el-radio-button>
+        <el-radio-button label="7">待退款</el-radio-button>
+        <el-radio-button label="8">已退款</el-radio-button>
+
       </el-radio-group>
     </div>
   </template>

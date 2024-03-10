@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { getOrderListApi } from "@/api/bms";
+import { getOrderListAllApi } from "@/api/bms";
 import Echarts from "@/components/Echarts.vue";
 export default {
   name: "home",
@@ -146,11 +146,11 @@ export default {
   methods: {
     async init() {
       //获取所有订单情况
-      const res = await getOrderListApi(1, 10, 0, "");
+      const res = await getOrderListAllApi(1, 10, 0, "");
       //待处理事务数据处理
       let orderState = [1, 2, 3];
       for (let i = 0; i < this.orderList.length; ++i) {
-        let data = res.result.items.filter(
+        let data = res.result.filter(
           (v) => v.orderState == orderState[i]
         );
         this.orderList[i].num = data.length;
@@ -161,7 +161,7 @@ export default {
       let orderState2 = [1, 2, 3, 4, 5, 6];
       let data = [];
       for (let j = 0; j < orderState2.length; ++j) {
-        const tmp = res.result.items.filter(
+        const tmp = res.result.filter(
           (v) => v.orderState == orderState2[j]
         );
         data.push(tmp.length);

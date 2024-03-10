@@ -35,7 +35,7 @@
           <!-- 根据订单状态显示不同的操作按钮 -->
           <el-button
             type="text"
-            v-if="scope.row.orderState === 1"
+            v-if="[1, 2].includes(scope.row.orderState)"
             @click="cancelOrder(scope.row)"
             >取消订单</el-button
           >
@@ -47,9 +47,15 @@
           >
           <el-button
             type="text"
-            v-if="[3, 4, 5, 6].includes(scope.row.orderState)"
+            v-if="[3, 4, 5, 6, 8].includes(scope.row.orderState)"
             @click="deleteOrder(scope.row)"
             >删除订单</el-button
+          >
+          <el-button
+            type="text"
+            v-if="[7].includes(scope.row.orderState)"
+            @click="refundOrder(scope.row)"
+            >退款</el-button
           >
         </template>
       </el-table-column>
@@ -101,10 +107,16 @@
 </template>
 
 <script>
-import { getOrderListApi,cancelOrderApi,deleteOrderApi,getConsignmentApi } from "@/api/bms";
+import {
+  getOrderListApi,
+  cancelOrderApi,
+  deleteOrderApi,
+  getConsignmentApi,
+  confirmRefundApi
+} from "@/api/bms";
 export default {
   name: "orderManagement",
-  props: ["orderState","searchText"],
+  props: ["orderState", "searchText"],
   data() {
     return {
       // 根据条件过滤后的订单
@@ -118,6 +130,8 @@ export default {
         { id: 4, text: "待评价" },
         { id: 5, text: "已完成" },
         { id: 6, text: "已取消" },
+        { id: 7, text: "待退款" },
+        { id: 8, text: "已退款" },
       ],
 
       pageNum: 1,
@@ -152,48 +166,69 @@ export default {
       this.total = res.result.counts;
     },
     // 取消订单
-     cancelOrder(order) {
+    cancelOrder(order) {
       // 实现取消订单的逻辑
-      this.$confirm("是否取消订单","取消订单").then(
-        async result=>{
-          const res = await cancelOrderApi(order.id)
-          if(res.code===1){
-            this.$message.success("取消订单成功")  
+      this.$confirm("是否取消订单", "取消订单")
+        .then(async (result) => {
+          const res = await cancelOrderApi(order.id);
+          if (res.code === 1) {
+            this.$message.success("取消订单成功");
             this.updateFilteredOrders();
           }
-      
-        }
-      ).catch(()=>{this.$message("操作取消")})
+        })
+        .catch(() => {
+          this.$message("操作取消");
+        });
       console.log("取消订单", order);
     },
     // 发货
     shipOrder(order) {
       // 实现发货的逻辑
-      this.$confirm("是否发货","发货").then(
-        async result=>{
-          const res = await getConsignmentApi(order.id)
-          if(res.code===1){
-            this.$message.success("发货成功")  
+      this.$confirm("是否发货", "发货")
+        .then(async (result) => {
+          const res = await getConsignmentApi(order.id);
+          if (res.code === 1) {
+            this.$message.success("发货成功");
             this.updateFilteredOrders();
           }
-      
-        }
-      ).catch(()=>{this.$message("操作取消")})
+        })
+        .catch(() => {
+          this.$message("操作取消");
+        });
       console.log("发货", order);
     },
     // 删除订单
     deleteOrder(order) {
       // 实现删除订单的逻辑
-      this.$confirm("是否删除订单","删除订单").then(
-        async result=>{
-          let ids =[order.id]
-          const res = await deleteOrderApi(ids)
-          if(res.code===1){
-            this.$message.success("删除成功")  
+      this.$confirm("是否删除订单", "删除订单")
+        .then(async (result) => {
+          let ids = [order.id];
+          const res = await deleteOrderApi(ids);
+          if (res.code === 1) {
+            this.$message.success("删除成功");
             this.updateFilteredOrders();
           }
-        }
-      ).catch(()=>{this.$message("操作取消")})
+        })
+        .catch(() => {
+          this.$message("操作取消");
+        });
+      console.log("删除订单", order);
+    },
+
+    //退款
+    refundOrder(order) {
+      // 实现退款的逻辑
+      this.$confirm("请确认无误后再进行退款", "确认退款")
+        .then(async (result) => {
+          const res = await confirmRefundApi(order.id);
+          if (res.code === 1) {
+            this.$message.success("删除成功");
+            this.updateFilteredOrders();
+          }
+        })
+        .catch(() => {
+          this.$message("操作取消");
+        });
       console.log("删除订单", order);
     },
     // 分页相关方法，根据实际情况实现
