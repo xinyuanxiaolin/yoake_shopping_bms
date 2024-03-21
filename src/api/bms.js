@@ -71,7 +71,14 @@ export const putGoods =(data)=>{
 export const deleteGoods = (ids)=>{
   return deleteAction(`/goods/${ids}`)
 }
-
+//上架商品
+export const putPutGood = (id)=>{
+  return putAction(`/goods/put/${id}`)
+}
+//下架商品
+export const putRemoveGood = (id)=>{
+  return putAction(`/goods/removed/${id}`)
+}
 
 /* 用户管理 */
 export const getUsers = (pageNum,pageSize,searchText) =>{

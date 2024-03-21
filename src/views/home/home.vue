@@ -35,10 +35,28 @@
       <el-card class="box-card card-3">
         <div class="part">
           <p>待处理事务</p>
-          <div class="part-row border-color">
+          <div class="part-row border-color1">
             <div
               class="part-col text-color"
               v-for="(order, index) in orderList"
+              :key="index"
+              @click="$router.push(order.url)"
+            >
+              <span class="text-color">{{ order.num }}</span>
+              <span class="text-color">{{ order.name }}</span>
+              <i class="iconfont icon-size" :class="order.icon"></i>
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="part">
+          <p>商品状况</p>
+          <div class="part-row border-color2">
+            <div
+              class="part-col text-color"
+              v-for="(order, index) in goodsList"
               :key="index"
               @click="$router.push(order.url)"
             >
@@ -99,6 +117,39 @@ export default {
           name: "待收货",
           icon: "icon-daifukuan",
         },
+        {
+          url: "/bms/order-manage",
+          num: null,
+          name: "待退款",
+          icon: "icon-tuikuan",
+        },
+        {
+          url: "/bms/order-manage",
+          num: null,
+          name: "待评价",
+          icon: "icon-dianzan",
+        },
+      ],
+      goodsList: [
+        {
+          url: "bms/product-manage",
+          num: null,
+          name: "全部商品",
+          icon: "icon-daifukuan",
+        },
+        {
+          url: "bms/product-manage",
+          num: null,
+          name: "已上架",
+          icon: "icon-daifukuan",
+        },
+        {
+          url: "bms/product-manage",
+          num: null,
+          name: "已下架",
+          icon: "icon-daifukuan",
+        },
+        
       ],
       //订单统计图
       barChartOptions: {
@@ -109,7 +160,16 @@ export default {
         },
         xAxis: {
           type: "category",
-          data: ["待付款", "待收货", "待发货", "待评价", "已完成", "已取消"],
+          data: [
+            "待付款",
+            "待收货",
+            "待发货",
+            "待评价",
+            "已完成",
+            "已取消",
+            "待退款",
+            "已退款",
+          ],
         },
         yAxis: {
           type: "value",
@@ -127,6 +187,8 @@ export default {
                   "#61a0a8",
                   "#d48265",
                   "#749f83",
+                  "#ca8622",
+                  "#ca8622",
                   "#ca8622",
                 ];
                 return colorList[params.dataIndex];
@@ -146,24 +208,20 @@ export default {
   methods: {
     async init() {
       //获取所有订单情况
-      const res = await getOrderListAllApi(1, 10, 0, "");
+      const res = await getOrderListAllApi();
       //待处理事务数据处理
-      let orderState = [1, 2, 3];
+      let orderState = [1, 2, 3, 7, 4];
       for (let i = 0; i < this.orderList.length; ++i) {
-        let data = res.result.filter(
-          (v) => v.orderState == orderState[i]
-        );
+        let data = res.result.filter((v) => v.orderState == orderState[i]);
         this.orderList[i].num = data.length;
         //  console.log(data)
       }
 
       //订单echarts数据处理
-      let orderState2 = [1, 2, 3, 4, 5, 6];
+      let orderState2 = [1, 2, 3, 4, 5, 6, 7, 8];
       let data = [];
       for (let j = 0; j < orderState2.length; ++j) {
-        const tmp = res.result.filter(
-          (v) => v.orderState == orderState2[j]
-        );
+        const tmp = res.result.filter((v) => v.orderState == orderState2[j]);
         data.push(tmp.length);
       }
       this.barChartOptions.series[0] = {
@@ -223,8 +281,13 @@ export default {
     }
   }
 }
-.border-color {
+.border-color1 {
   background-color: #ffa098;
+  padding: 10px;
+  border-radius: 10px;
+}
+.border-color2 {
+  background-color: #6DB7F8;
   padding: 10px;
   border-radius: 10px;
 }

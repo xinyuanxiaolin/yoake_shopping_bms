@@ -81,9 +81,9 @@
           <!-- <el-button @click="handleEdit(scope.row)" type="text" size="small"
             >编辑</el-button
           > -->
-          <el-button type="text" size="small"
+          <!-- <el-button type="text" size="small"
             >禁用</el-button
-          >
+          > -->
           <el-button @click="handleDelete(scope.row)" type="text" size="small"
             >删除</el-button
           >

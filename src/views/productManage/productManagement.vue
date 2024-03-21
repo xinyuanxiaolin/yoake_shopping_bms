@@ -54,6 +54,12 @@
           <el-button type="primary" size="small" @click="handleEdit(scope.row)"
             >编辑</el-button
           >
+            <el-button v-if="scope.row.removed==0" type="warning" size="small" @click="handleRemoved(scope.row)"
+            >下架</el-button
+          >
+          <el-button v-else type="success" size="small" @click="handlePut(scope.row)"
+            >上架</el-button
+          >
           <el-button @click="handleDelete(scope.row)" type="danger" size="small"
             >删除</el-button
           >
@@ -93,7 +99,7 @@
 </template>
 
 <script>
-import { getGoodsList, getGoodsById, putGoods, deleteGoods } from "@/api/bms";
+import { getGoodsList, getGoodsById, putGoods, deleteGoods,putPutGood,putRemoveGood } from "@/api/bms";
 import ProductEditAndPublish from "@/views/productManage/components/ProductEditAndPublish.vue";
 export default {
   components: {
@@ -174,6 +180,30 @@ export default {
           this.$refs.changeProduct.solvePictures();
         });
       });
+    },
+    //下架商品
+    handleRemoved(row){
+      this.$confirm("请你确认是否要下架此商品?", "下架商品")
+        .then(async (result) => {
+          const res = await putRemoveGood(row.id);
+          if (res.code === 1) {
+            this.$message.success("下架成功");
+            this.init();
+          }
+        })
+        .catch(() => this.$message("取消操作"));
+    },
+    //上架商品
+    handlePut(row){
+      this.$confirm("请你确认是否要上架此商品?", "上架商品")
+        .then(async (result) => {
+          const res = await putPutGood(row.id);
+          if (res.code === 1) {
+            this.$message.success("上架成功");
+            this.init();
+          }
+        })
+        .catch(() => this.$message("取消操作"));
     },
     // 选择框发生改变
     handleSelectionChange(val) {

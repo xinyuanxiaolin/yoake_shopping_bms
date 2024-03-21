@@ -3,7 +3,7 @@
     <!-- 列表内容 -->
     <el-table :data="orders" style="width: 100%" border stripe>
       <!-- 列定义，根据实际需要调整 -->
-      <el-table-column prop="id" label="订单编号" width="150"></el-table-column>
+      <el-table-column prop="id" label="订单编号" width="150" sortable></el-table-column>
       <el-table-column label="商品详情" width="120">
         <template slot-scope="scope">
           <el-image
@@ -19,7 +19,7 @@
         label="送货地址"
         prop="receiverAddress"
       ></el-table-column>
-      <el-table-column label="订单创建时间" prop="createTime"></el-table-column>
+      <el-table-column label="订单创建时间" prop="createTime" sortable></el-table-column>
       <el-table-column label="商品总价" prop="totalMoney"></el-table-column>
       <el-table-column label="运费" prop="postFee"></el-table-column>
       <el-table-column label="总费用" prop="payMoney"></el-table-column>
