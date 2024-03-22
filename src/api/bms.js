@@ -80,6 +80,11 @@ export const putRemoveGood = (id)=>{
   return putAction(`/goods/removed/${id}`)
 }
 
+//获取全部商品
+export const getAllGoods =()=>{
+  return getAction("/goods/statistic");
+}
+
 /* 用户管理 */
 export const getUsers = (pageNum,pageSize,searchText) =>{
   let data ={

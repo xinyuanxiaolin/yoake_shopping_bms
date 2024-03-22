@@ -48,21 +48,21 @@
             </div>
           </div>
         </div>
-        <br>
-        <br>
-        <br>
+        <br />
+        <br />
+        <br />
         <div class="part">
           <p>商品状况</p>
           <div class="part-row border-color2">
             <div
               class="part-col text-color"
-              v-for="(order, index) in goodsList"
+              v-for="(goods, index) in goodsList"
               :key="index"
-              @click="$router.push(order.url)"
+              @click="$router.push(goods.url)"
             >
-              <span class="text-color">{{ order.num }}</span>
-              <span class="text-color">{{ order.name }}</span>
-              <i class="iconfont icon-size" :class="order.icon"></i>
+              <span class="text-color">{{ goods.num }}</span>
+              <span class="text-color">{{ goods.name }}</span>
+              <i class="iconfont icon-size" :class="goods.icon"></i>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getOrderListAllApi } from "@/api/bms";
+import { getOrderListAllApi, getAllGoods } from "@/api/bms";
 import Echarts from "@/components/Echarts.vue";
 export default {
   name: "home",
@@ -115,7 +115,7 @@ export default {
           url: "/bms/order-manage",
           num: null,
           name: "待收货",
-          icon: "icon-daifukuan",
+          icon: "icon-daishouhuo",
         },
         {
           url: "/bms/order-manage",
@@ -132,24 +132,23 @@ export default {
       ],
       goodsList: [
         {
-          url: "bms/product-manage",
+          url: "/bms/product-manage",
           num: null,
           name: "全部商品",
-          icon: "icon-daifukuan",
+          icon: "icon-shangpinguanli",
         },
         {
-          url: "bms/product-manage",
+          url: "/bms/product-manage",
           num: null,
           name: "已上架",
-          icon: "icon-daifukuan",
+          icon: "icon-yishangjiashangpin",
         },
         {
-          url: "bms/product-manage",
+          url: "/bms/product-manage",
           num: null,
           name: "已下架",
-          icon: "icon-daifukuan",
+          icon: "icon-yixiajiashangpin",
         },
-        
       ],
       //订单统计图
       barChartOptions: {
@@ -188,8 +187,8 @@ export default {
                   "#d48265",
                   "#749f83",
                   "#ca8622",
-                  "#ca8622",
-                  "#ca8622",
+                  "#ca8999",
+                  "#3aaaf4",
                 ];
                 return colorList[params.dataIndex];
               },
@@ -229,6 +228,16 @@ export default {
         data,
       };
       this.$refs.bar.renderChart();
+
+      //获取商品状况
+      const goodsRes = await getAllGoods();
+      this.goodsList[0].num = goodsRes.result.length;
+      //-1代表全部商品 0是已上架，1是已下架
+      let goodsState = [-1, 0, 1];
+      for (let d = 1; d < this.goodsList.length; ++d) {
+        const data = goodsRes.result.filter((v) => v.removed == goodsState[d]);
+        this.goodsList[d].num = data.length;
+      }
     },
   },
 };
@@ -287,7 +296,7 @@ export default {
   border-radius: 10px;
 }
 .border-color2 {
-  background-color: #6DB7F8;
+  background-color: #6db7f8;
   padding: 10px;
   border-radius: 10px;
 }

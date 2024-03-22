@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2811146",
+      "name": "待收货",
+      "font_class": "daishouhuo",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "6158104",
+      "name": "已上架商品",
+      "font_class": "yishangjiashangpin",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "14729962",
+      "name": "已下架商品",
+      "font_class": "yixiajiashangpin",
+      "unicode": "e8ac",
+      "unicode_decimal": 59564
+    },
+    {
       "icon_id": "1459142",
       "name": "编辑",
       "font_class": "bianji",
