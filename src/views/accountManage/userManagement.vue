@@ -301,7 +301,6 @@ export default {
       });
     },
     handleSearch() {
-      // Reset pagination to the first page when performing a search
       this.pageNum = 1;
       this.updatePagedUsers();
     },

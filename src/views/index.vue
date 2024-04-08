@@ -35,6 +35,8 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/bms/order-manage">订单管理</el-menu-item>
+            <el-menu-item index="/bms/recycle-manage">回收管理</el-menu-item>
+
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">

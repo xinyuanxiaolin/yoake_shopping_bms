@@ -148,6 +148,39 @@ export const confirmRefundApi = (id)=>{
   return putAction(`/member/order/${id}/confirmReject`)
 }
 
+//二手回收相关
+//管理员同意回收
+export const confrimRecycleApi =(id)=>{
+  return putAction(`/recycle/${id}/admin/confirm`)
+}
+
+//管理员改变回收价格
+export const changeEvaluateApi = (id,evaluate)=>{
+  let data = {
+    id,
+    evaluate
+  }
+  return postAction("/recycle/changeEvaluate",data)
+}
+//二手回收订单条件分页查询
+export const getRecycle=(page,pageSize,state,searchText)=>{
+  let data={
+    page,
+    pageSize,
+    state,
+    searchText
+  }
+  return getAction("/recycle/admin",data)
+}
+//删除二手回收订单
+export const delRecycleApi=(id)=>{
+  return deleteAction(`/recycle/${id}`)
+}
+//取消二手回收订单
+export const candelRecycleApi = (id)=>{
+  return putAction(`/recycle/${id}`)
+}
+
 /* 设置 */
 
 //获取所有轮播图

@@ -102,6 +102,14 @@ const routes = [
           title:"订单管理"
         }
       },
+      {
+        path:"recycle-manage",
+        name:"recycle-manage",
+        component:()=> import ("../views/orderManage/recycleManagement.vue"),
+        meta:{
+          title:"回收管理"
+        }
+      },
        /* 账号管理 */
       //  用户管理
       {
